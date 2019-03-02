@@ -6,8 +6,9 @@ var numberOptions = [10, 5, 3, 7];
 winsCount = 0;
 lossesCount = 0;
 
+// begin the game by running the target number maker and changing state. slide away the key to start.
 $(document).keypress(function() {
-    if (!started) { // if started is false
+    if (!started) { // if started is false, then do this stuff
         targetNumberMaker();
         $("#level-title").slideUp();
         $("#number-to-guess").text(targetNumber);
@@ -15,11 +16,13 @@ $(document).keypress(function() {
     }
 });
 
+// make a new target number
 function targetNumberMaker() {
     targetNumber = Math.floor(Math.random() * (120-19) + 19);
     return targetNumber;
 }
 
+// make a new list of values for the buttons
 function numberOptionsMaker() {
     numberOptions = [];
     for (let i = 0; i < 4; i++) {
@@ -29,12 +32,22 @@ function numberOptionsMaker() {
     return numberOptions;
 }
 
+// reset
+function startOver() {
+    score = 0;
+    $("#your-score").text(score);
+    targetNumberMaker();
+    $("#number-to-guess").text(targetNumber);
+    started = false;
+    numberOptionsMaker();
+    console.log(targetNumber);
+    console.log(numberOptions);
+}
 
 
 // build a tag for each image, then insert into the div placeholder with id crystals
 for (let i = 0; i < numberOptions.length; i++) {
     var numIndex = numberOptions.indexOf(numberOptions[i]);
-    console.log(numIndex);
     var imageNumberString= "";
 
     if (numIndex === 0) {
@@ -82,31 +95,25 @@ $(".crystal-image").on("click", function() {
         $("#level-title").text("You winner, you!").fadeIn("slow").fadeOut("slow");
         winsCount++;
         $(".wins").text("Wins: " + winsCount);
-        score = 0;
-        $("#your-score").text(score);
-        targetNumberMaker();
-        $("#number-to-guess").text(targetNumber);
-        numberOptionsMaker();
+        startOver();
     } else if (score >= targetNumber) {
         var audioWrong = new Audio("assets/sounds/wrong.mp3");
         audioWrong.play();
         $("#level-title").text("Dang, you lost!").fadeIn("slow").fadeOut("slow");
         lossesCount++;
         $(".losses").text("Losses: " + lossesCount);
-        score = 0;
-        $("#your-score").text(score);
-        targetNumberMaker();
-        $("#number-to-guess").text(targetNumber);
-        numberOptionsMaker();
+        startOver();
     }
-
-
 })
 
 function playSound(name) {
     var audio = new Audio("assets/sounds/" + name + ".mp3");
     audio.play();
 }
+
+
+
+
 
 
 
