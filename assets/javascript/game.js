@@ -29,6 +29,8 @@ function numberOptionsMaker() {
     return numberOptions;
 }
 
+
+
 // build a tag for each image, then insert into the div placeholder with id crystals
 for (let i = 0; i < numberOptions.length; i++) {
     var numIndex = numberOptions.indexOf(numberOptions[i]);
@@ -49,6 +51,7 @@ for (let i = 0; i < numberOptions.length; i++) {
     imageCrystal.addClass("crystal-image"); // give it a class
     imageCrystal.attr("src", "assets/images/" + imageNumberString + ".png");  // give it a source for an image
     imageCrystal.attr("data-crystalvalue", numberOptions[i]); // give it a new attribute and value
+    imageCrystal.attr("data-numbervalue", imageNumberString);
     $("#crystals").append(imageCrystal); // append all of that to the img tag
 }
 
@@ -65,14 +68,17 @@ $("#stats").append(lossesText);
 // on clicking the image, it creates a number stored in data-crystalvalue attribute inside the tag
 $(".crystal-image").on("click", function() {
     var crystalValue = ($(this).attr("data-crystalvalue"));
+    var numberValue = ($(this).attr("data-numbervalue"));
     crystalValue = parseInt(crystalValue); // make the number a string
     score += crystalValue;
 
     $("#your-score").text(score);
 
-
+    playSound(numberValue);
 
     if (score === targetNumber) {
+        var audioParty = new Audio("assets/sounds/party.mp3");
+        audioParty.play();
         $("#level-title").text("You winner, you!").fadeIn("slow").fadeOut("slow");
         winsCount++;
         $(".wins").text("Wins: " + winsCount);
@@ -82,6 +88,8 @@ $(".crystal-image").on("click", function() {
         $("#number-to-guess").text(targetNumber);
         numberOptionsMaker();
     } else if (score >= targetNumber) {
+        var audioWrong = new Audio("assets/sounds/wrong.mp3");
+        audioWrong.play();
         $("#level-title").text("Dang, you lost!").fadeIn("slow").fadeOut("slow");
         lossesCount++;
         $(".losses").text("Losses: " + lossesCount);
@@ -94,6 +102,11 @@ $(".crystal-image").on("click", function() {
 
 
 })
+
+function playSound(name) {
+    var audio = new Audio("assets/sounds/" + name + ".mp3");
+    audio.play();
+}
 
 
 
