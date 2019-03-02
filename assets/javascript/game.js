@@ -20,6 +20,15 @@ function targetNumberMaker() {
     return targetNumber;
 }
 
+function numberOptionsMaker() {
+    numberOptions = [];
+    for (let i = 0; i < 4; i++) {
+        number = Math.floor(Math.random() * (12-1) + 1);
+        numberOptions.push(number);
+    }
+    return numberOptions;
+}
+
 // build a tag for each image, then insert into the div placeholder with id crystals
 for (let i = 0; i < numberOptions.length; i++) {
     var numIndex = numberOptions.indexOf(numberOptions[i]);
@@ -64,21 +73,23 @@ $(".crystal-image").on("click", function() {
 
 
     if (score === targetNumber) {
-        alert("you win");
+        $("#level-title").text("You winner, you!").fadeIn("slow").fadeOut("slow");
         winsCount++;
         $(".wins").text("Wins: " + winsCount);
         score = 0;
         $("#your-score").text(score);
         targetNumberMaker();
         $("#number-to-guess").text(targetNumber);
+        numberOptionsMaker();
     } else if (score >= targetNumber) {
-        alert("you lose");
+        $("#level-title").text("Dang, you lost!").fadeIn("slow").fadeOut("slow");
         lossesCount++;
         $(".losses").text("Losses: " + lossesCount);
         score = 0;
         $("#your-score").text(score);
         targetNumberMaker();
         $("#number-to-guess").text(targetNumber);
+        numberOptionsMaker();
     }
 
 
