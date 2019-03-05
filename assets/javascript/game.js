@@ -11,8 +11,11 @@ $(document).keypress(function() {
     if (!started) { // if started is false, then do this stuff
         targetNumberMaker();
         $("#level-title").slideUp();
+        $("#instructions").slideDown();
         $("#number-to-guess").text(targetNumber);
         started = true; // change state.  makes sure this happens only on first round
+        console.log(targetNumber);
+        console.log(numberOptions);
     }
 });
 
@@ -39,16 +42,23 @@ function startOver() {
     targetNumberMaker();
     $("#number-to-guess").text(targetNumber);
     started = false;
-    numberOptionsMaker();
+    var newNumberOptions = numberOptionsMaker();
+
+    $(".crystal-image").each(function(i) {
+        $(this).attr("data-crystalvalue", newNumberOptions[i]);
+    })
+
     console.log(targetNumber);
-    console.log(numberOptions);
+    console.log(newNumberOptions);
 }
 
+
+// numberOptionsMaker();
 
 // build a tag for each image, then insert into the div placeholder with id crystals
 for (let i = 0; i < numberOptions.length; i++) {
     var numIndex = numberOptions.indexOf(numberOptions[i]);
-    var imageNumberString= "";
+    var imageNumberString = "";
 
     if (numIndex === 0) {
         imageNumberString = "four";
@@ -67,6 +77,7 @@ for (let i = 0; i < numberOptions.length; i++) {
     imageCrystal.attr("data-numbervalue", imageNumberString);
     $("#crystals").append(imageCrystal); // append all of that to the img tag
 }
+
 
 var winsText = $("<h3>");
 winsText.addClass("wins");
